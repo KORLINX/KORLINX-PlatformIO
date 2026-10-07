@@ -1,0 +1,43 @@
+name: Release
+
+# Push a tag X.Y.Z on main to release. The tag must equal "version" in
+# platform.json. Users pin a release with
+#   platform = https://github.com/KORLINX/KORLINX-PlatformIO.git#X.Y.Z
+
+on:
+  push:
+    tags:
+      - '[0-9]*.[0-9]*.[0-9]*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check the tag
+        run: |
+          set -euo pipefail
+          version=$(python3 -c 'import json; print(json.load(open("platform.json"))["version"])')
+          [ "$version" = "$GITHUB_REF_NAME" ] || {
+            echo "::error::tag $GITHUB_REF_NAME does not match platform.json version $version"; exit 1; }
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main || {
+            echo "::error::tag $GITHUB_REF_NAME is not on main"; exit 1; }
+          core=$(python3 -c 'import json; print(json.load(open("platform.json"))["packages"]["framework-arduino-korlinx-nrf52"]["version"])')
+          case "$core" in
+            https://github.com/KORLINX/KORLINX-nRF52-Arduino/releases/download/*) ;;
+            *) echo "::error::the core must come from a KORLINX-nRF52-Arduino release, not $core"; exit 1 ;;
+          esac
+          echo "CORE=$core" >> "$GITHUB_ENV"
+
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --verify-tag \
+            --notes "Use it with \`platform = https://github.com/KORLINX/KORLINX-PlatformIO.git#$GITHUB_REF_NAME\`. Arduino core: $CORE"

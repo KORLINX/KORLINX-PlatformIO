@@ -1,0 +1,35 @@
+name: Examples
+
+# Builds every example against this checkout of the platform, with the core
+# pinned in platform.json. A pull request from the Bump core workflow runs
+# this too, so a new core release is built before it reaches users.
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install PlatformIO and this platform
+        run: |
+          pip install platformio
+          pio pkg install -g -p "file://${{ github.workspace }}"
+
+      - name: Build the examples
+        shell: bash
+        run: |
+          for ex in examples/*/; do
+            echo "::group::$ex"
+            pio run -d "$ex"
+            echo "::endgroup::"
+          done

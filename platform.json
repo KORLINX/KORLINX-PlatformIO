@@ -1,0 +1,74 @@
+{
+  "name": "korlinx",
+  "title": "KORLINX",
+  "description": "KORLINX nRF52 boards for PlatformIO, built with the same Arduino core the Arduino IDE installs as korlinx:nrf52.",
+  "homepage": "https://github.com/KORLINX/KORLINX-PlatformIO",
+  "license": "Apache-2.0",
+  "keywords": [
+    "dev-platform",
+    "ARM",
+    "Cortex-M",
+    "Nordic Semiconductor",
+    "nRF52",
+    "KORLINX"
+  ],
+  "engines": {
+    "platformio": "^6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KORLINX/KORLINX-PlatformIO.git"
+  },
+  "version": "1.0.0",
+  "frameworks": {
+    "arduino": {
+      "package": "framework-arduino-korlinx-nrf52",
+      "script": "builder/frameworks/arduino/adafruit.py"
+    }
+  },
+  "packages": {
+    "toolchain-gccarmnoneeabi": {
+      "type": "toolchain",
+      "owner": "platformio",
+      "version": "~1.90201.0"
+    },
+    "framework-arduino-korlinx-nrf52": {
+      "type": "framework",
+      "optional": true,
+      "version": "https://github.com/KORLINX/KORLINX-nRF52-Arduino/releases/download/v1.0.2/KXduino_nRF52-1.0.2.tar.bz2"
+    },
+    "framework-cmsis": {
+      "type": "framework",
+      "optional": true,
+      "owner": "platformio",
+      "version": "~2.50700.0"
+    },
+    "tool-adafruit-nrfutil": {
+      "owner": "platformio",
+      "optional": true,
+      "version": "~1.503.0"
+    },
+    "tool-sreccat": {
+      "owner": "platformio",
+      "version": "~1.164.0"
+    },
+    "tool-openocd": {
+      "type": "uploader",
+      "optional": true,
+      "owner": "platformio",
+      "version": "~3.1200.7"
+    },
+    "tool-nrfjprog": {
+      "type": "uploader",
+      "optional": true,
+      "owner": "platformio",
+      "version": "~1.90702.0"
+    },
+    "tool-jlink": {
+      "type": "uploader",
+      "optional": true,
+      "owner": "platformio",
+      "version": "^1.92000.0"
+    }
+  }
+}
