@@ -35,7 +35,7 @@
     "framework-arduino-korlinx-nrf52": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/KORLINX/KORLINX-nRF52-Arduino/releases/download/v1.0.2/KXduino_nRF52-1.0.2.tar.bz2"
+      "version": "https://github.com/KORLINX/KORLINX-nRF52-Arduino/releases/download/v1.0.2/KXduino_nRF52-1.0.2.tar.gz"
     },
     "framework-cmsis": {
       "type": "framework",
