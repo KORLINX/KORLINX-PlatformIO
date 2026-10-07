@@ -70,8 +70,8 @@ pio run -d examples/arduino-blink
 KORLINX-nRF52-Arduino: tag vX.Y.Z
   └─ Release workflow builds KXduino_nRF52-X.Y.Z.tar.gz once, publishes it,
      adds it to package_korlinx_index.json  ─────────►  Arduino IDE
-     and dispatches Bump core here
-KORLINX-PlatformIO: Bump core opens a PR that pins the new archive URL
+KORLINX-PlatformIO: run Bump core with X.Y.Z; it opens a PR that pins the
+  new archive URL
   └─ Examples workflow builds it; merge, bump "version", tag  ─►  PlatformIO
 ```
 
