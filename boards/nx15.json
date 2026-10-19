@@ -1,0 +1,31 @@
+{
+  "build": {
+    "core": "zephyr",
+    "cpu": "cortex-m33",
+    "mcu": "nrf54l15",
+    "f_cpu": "128000000L",
+    "board": "NX15_NRF54L15",
+    "variant": "nx15_nrf54l15_cpuapp"
+  },
+  "connectivity": [
+    "bluetooth"
+  ],
+  "debug": {
+    "jlink_device": "nRF54L15_M33"
+  },
+  "frameworks": [
+    "arduino"
+  ],
+  "name": "KORLINX NX15 nRF54L15",
+  "upload": {
+    "maximum_ram_size": 131072,
+    "maximum_size": 1130496,
+    "offset_address": "0x60000",
+    "protocol": "jlink",
+    "protocols": [
+      "jlink"
+    ]
+  },
+  "url": "https://wiki.korlinx.com/docs/Network/Bluetooth/NX15_Dev_Kit/NX15_Dev_Kit_Overview",
+  "vendor": "KORLINX"
+}

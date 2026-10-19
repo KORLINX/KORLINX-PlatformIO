@@ -28,11 +28,15 @@ jobs:
             echo "::error::tag $GITHUB_REF_NAME does not match platform.json version $version"; exit 1; }
           git merge-base --is-ancestor "$GITHUB_SHA" origin/main || {
             echo "::error::tag $GITHUB_REF_NAME is not on main"; exit 1; }
-          core=$(python3 -c 'import json; print(json.load(open("platform.json"))["packages"]["framework-arduino-korlinx-nrf52"]["version"])')
-          case "$core" in
-            https://github.com/KORLINX/KORLINX-nRF52-Arduino/releases/download/*) ;;
-            *) echo "::error::the core must come from a KORLINX-nRF52-Arduino release, not $core"; exit 1 ;;
-          esac
+          # every package fetched by URL must come from a KORLINX release
+          python3 - <<'EOF'
+          import json, sys
+          for name, pkg in json.load(open("platform.json"))["packages"].items():
+              url = pkg["version"]
+              if "://" in url and not url.startswith("https://github.com/KORLINX/"):
+                  sys.exit("::error::%s must come from a KORLINX release, not %s" % (name, url))
+          EOF
+          core=$(python3 -c 'import json; p=json.load(open("platform.json"))["packages"]; print(" and ".join(p[n]["version"] for n in ("framework-arduino-korlinx-nrf52", "framework-arduino-korlinx-zephyr")))')
           echo "CORE=$core" >> "$GITHUB_ENV"
 
       - name: Publish the GitHub release
@@ -40,4 +44,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --verify-tag \
-            --notes "Use it with \`platform = https://github.com/KORLINX/KORLINX-PlatformIO.git#$GITHUB_REF_NAME\`. Arduino core: $CORE"
+            --notes "Use it with \`platform = https://github.com/KORLINX/KORLINX-PlatformIO.git#$GITHUB_REF_NAME\`. Arduino cores: $CORE"

@@ -1,10 +1,13 @@
 #include <Arduino.h>
 
+bool on;
+
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
-  digitalToggle(LED_BUILTIN);
+  on = !on;
+  digitalWrite(LED_BUILTIN, on);
   delay(500);
 }

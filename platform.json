@@ -1,7 +1,7 @@
 {
   "name": "korlinx",
   "title": "KORLINX",
-  "description": "KORLINX nRF52 boards for PlatformIO, built with the same Arduino core the Arduino IDE installs as korlinx:nrf52.",
+  "description": "KORLINX boards for PlatformIO, built with the same Arduino cores the Arduino IDE installs as korlinx:nrf52 and korlinx:zephyr.",
   "homepage": "https://github.com/KORLINX/KORLINX-PlatformIO",
   "license": "Apache-2.0",
   "keywords": [
@@ -10,6 +10,8 @@
     "Cortex-M",
     "Nordic Semiconductor",
     "nRF52",
+    "nRF54L",
+    "Zephyr",
     "KORLINX"
   ],
   "engines": {
@@ -19,7 +21,7 @@
     "type": "git",
     "url": "https://github.com/KORLINX/KORLINX-PlatformIO.git"
   },
-  "version": "1.0.0",
+  "version": "1.1.0",
   "frameworks": {
     "arduino": {
       "package": "framework-arduino-korlinx-nrf52",
@@ -36,6 +38,31 @@
       "type": "framework",
       "optional": true,
       "version": "https://github.com/KORLINX/KORLINX-nRF52-Arduino/releases/download/v1.0.2/KXduino_nRF52-1.0.2.tar.gz"
+    },
+    "framework-arduino-korlinx-zephyr": {
+      "type": "framework",
+      "optional": true,
+      "version": "https://github.com/KORLINX/ArduinoCore-zephyr/releases/download/korlinx-0.2.3/korlinx-0.2.3.tar.gz"
+    },
+    "toolchain-gccarmzephyreabi": {
+      "type": "toolchain",
+      "optional": true,
+      "version": "https://github.com/KORLINX/ArduinoCore-zephyr/releases/download/korlinx-0.2.3/toolchain-gccarmzephyreabi-1.0.1-{host}.tar.xz"
+    },
+    "tool-zephyr-sketch-tool": {
+      "type": "tool",
+      "optional": true,
+      "version": "https://github.com/KORLINX/ArduinoCore-zephyr/releases/download/korlinx-0.2.3/tool-zephyr-sketch-tool-0.4.1-{host}.tar.xz"
+    },
+    "tool-gen-rodata-ld": {
+      "type": "tool",
+      "optional": true,
+      "version": "https://github.com/KORLINX/ArduinoCore-zephyr/releases/download/korlinx-0.2.3/tool-gen-rodata-ld-0.1.1-{host}.tar.xz"
+    },
+    "tool-zephyr-check-size": {
+      "type": "tool",
+      "optional": true,
+      "version": "https://github.com/KORLINX/ArduinoCore-zephyr/releases/download/korlinx-0.2.3/tool-zephyr-check-size-0.1.0-{host}.tar.xz"
     },
     "framework-cmsis": {
       "type": "framework",

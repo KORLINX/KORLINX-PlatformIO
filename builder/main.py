@@ -13,8 +13,7 @@
 # limitations under the License.
 #
 # Adapted from builder/main.py of platformio/platform-nordicnrf52 at 278176a.
-# KORLINX changes: the framework package is framework-arduino-korlinx-nrf52,
-# and the Zephyr pre-build hook is removed (this platform has no Zephyr).
+# KORLINX changes: the framework package is framework-arduino-korlinx-nrf52
 
 import sys
 from platform import system
@@ -22,7 +21,7 @@ from os import makedirs
 from os.path import isdir, join, basename
 
 from SCons.Script import (ARGUMENTS, COMMAND_LINE_TARGETS, AlwaysBuild,
-                          Builder, Default, DefaultEnvironment)
+                          Builder, Default, DefaultEnvironment, Return)
 
 from platformio.public import list_serial_ports
 
@@ -55,6 +54,10 @@ env = DefaultEnvironment()
 platform = env.PioPlatform()
 board = env.BoardConfig()
 variant = board.get("build.variant", "")
+
+if board.get("build.core", "") == "zephyr":
+    env.SConscript("zephyr.py", exports="env")
+    Return()
 
 env.Replace(
     AR="arm-none-eabi-ar",
