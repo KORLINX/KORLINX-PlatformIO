@@ -18,10 +18,17 @@
 
 import sys
 
-from platformio.public import PlatformBase
+from platformio.public import PlatformBase, get_systype
 
 
 IS_WINDOWS = sys.platform.startswith("win")
+
+# Boards with build.core = zephyr build on the KORLINX Arduino Zephyr core
+ZEPHYR_TOOLS = ("toolchain-gccarmzephyreabi", "tool-zephyr-sketch-tool",
+                "tool-gen-rodata-ld", "tool-zephyr-check-size")
+NRF52_ONLY = ("toolchain-gccarmnoneeabi", "framework-arduino-korlinx-nrf52",
+              "framework-cmsis", "tool-adafruit-nrfutil", "tool-sreccat",
+              "tool-openocd", "tool-nrfjprog")
 
 
 class KorlinxPlatform(PlatformBase):
@@ -37,11 +44,25 @@ class KorlinxPlatform(PlatformBase):
                 "upload_protocol",
                 self.board_config(board).get("upload.protocol", ""))
 
-        if "arduino" in variables.get("pioframework", []):
+        # Host-specific tools carry {host} in their URL
+        for options in self.packages.values():
+            options["version"] = options.get("version", "").replace(
+                "{host}", get_systype())
+
+        if board and self.board_config(board).get("build.core", "") == "zephyr":
+            self.frameworks["arduino"].update(
+                package="framework-arduino-korlinx-zephyr",
+                script="builder/frameworks/arduino/zephyr.py")
+            for name in ZEPHYR_TOOLS:
+                self.packages[name]["optional"] = False
+            for name in NRF52_ONLY:
+                self.packages.pop(name, None)
+        elif "arduino" in variables.get("pioframework", []):
             self.packages["framework-cmsis"]["optional"] = False
             self.packages["tool-adafruit-nrfutil"]["optional"] = False
 
-        if set(["bootloader", "erase"]) & set(targets):
+        if (set(["bootloader", "erase"]) & set(targets)
+                and "tool-nrfjprog" in self.packages):
             self.packages["tool-nrfjprog"]["optional"] = False
         elif (upload_protocol and upload_protocol != "nrfjprog"
               and "tool-nrfjprog" in self.packages):
@@ -76,6 +97,9 @@ class KorlinxPlatform(PlatformBase):
         return result
 
     def _add_default_debug_tools(self, board):
+        # shortcut: no debugging into a loaded LLEXT sketch yet
+        if board.manifest.get("build", {}).get("core") == "zephyr":
+            return board
         debug = board.manifest.get("debug", {})
         upload_protocols = board.manifest.get("upload", {}).get(
             "protocols", [])
