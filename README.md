@@ -67,13 +67,32 @@ not supported yet.
 
 ## Examples
 
-`examples/` has Blink (NX40 and NX15), USB Serial and the Bluefruit BLE UART
-peripheral (NX40). They use the short name `platform = korlinx`, so install
-the platform once, then build one:
+| Example | Board | Shows |
+|---|---|---|
+| `arduino-blink` | NX40, NX15 | The built-in LED |
+| `arduino-usb-serial` | NX40 | `Serial` over USB |
+| `arduino-ble-uart` | NX40 | The Bluefruit BLE UART peripheral |
+| `arduino-leds` | NX40, NX15 | The four LEDs in turn |
+| `arduino-button` | NX40, NX15 | The button, debounced |
+| `arduino-fade` | NX40, NX15 | `analogWrite()` on the red LED |
+| `arduino-analog` | NX40, NX15 | `analogRead()` on the J3 header |
+| `arduino-serial-echo` | NX40, NX15 | Lines read from `Serial` and sent back |
+| `arduino-shtc3` | NX40, NX15 | SHTC3 temperature and humidity on `Wire` |
+| `arduino-imu` | NX40, NX15 | Acceleration and rotation from the IMU on `Wire` |
+
+The examples use the short name `platform = korlinx`, so install the platform
+once, then build one:
 
 ```sh
 pio pkg install -g -p https://github.com/KORLINX/KORLINX-PlatformIO.git#1.1.0
 pio run -d examples/arduino-blink
+```
+
+An example for both boards has an `nx40` and an `nx15` environment, and
+`pio run` builds both. Pick one with `-e`:
+
+```sh
+pio run -d examples/arduino-leds -e nx15 -t upload
 ```
 
 ## How releases flow
